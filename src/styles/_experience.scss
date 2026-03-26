@@ -1,0 +1,102 @@
+.experience-panel {
+  padding-left: calc($nav-width + 6vw);
+  padding-right: 6vw;
+  align-items: center;
+
+  .experience-inner {
+    width: 100%;
+    max-width: 900px;
+  }
+
+  .experience-header {
+    margin-bottom: 3rem;
+  }
+
+  // ── Timeline ──────────────────────────────────────────────────────────────
+  .timeline {
+    position: relative;
+    padding-left: 2rem;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.6rem;
+      width: 1px;
+      background: $border;
+      transform-origin: top;
+    }
+  }
+
+  .timeline-item {
+    position: relative;
+    padding-bottom: 2.75rem;
+
+    &:last-child { padding-bottom: 0; }
+
+    // Dot on the line
+    &::before {
+      content: '';
+      position: absolute;
+      left: calc(-2rem - 3px);
+      top: 0.55rem;
+      width: 7px;
+      height: 7px;
+      background: $accent;
+      border-radius: 50%;
+      box-shadow: 0 0 0 3px rgba(255, 122, 0, 0.15);
+    }
+  }
+
+  .timeline-period {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: $accent;
+    margin-bottom: 0.35rem;
+  }
+
+  .timeline-role {
+    font-family: $font-display;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: $text;
+    margin-bottom: 0.15rem;
+  }
+
+  .timeline-company {
+    font-size: 0.85rem;
+    color: $muted;
+    margin-bottom: 0.65rem;
+  }
+
+  .timeline-desc {
+    font-size: 0.88rem;
+    color: $muted;
+    line-height: 1.65;
+    margin-bottom: 0.85rem;
+    max-width: 58ch;
+  }
+
+  .timeline-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+}
+
+@media (max-width: $bp-mobile) {
+  .experience-panel {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    align-items: flex-start;
+    padding-top: 2rem;
+
+    .timeline { padding-left: 1.5rem; }
+
+    .timeline-item::before {
+      left: calc(-1.5rem - 3px);
+    }
+  }
+}

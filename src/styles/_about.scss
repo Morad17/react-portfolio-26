@@ -1,0 +1,63 @@
+.about-panel {
+  padding-left: calc($nav-width + 6vw);
+  padding-right: 6vw;
+  align-items: center;
+
+  .about-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6vw;
+    width: 100%;
+    max-width: 1100px;
+  }
+
+  .about-left {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .about-bio {
+    font-size: clamp(1rem, 1.35vw, 1.15rem);
+    color: $muted;
+    line-height: 1.75;
+    max-width: 50ch;
+  }
+
+  .about-right {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .about-skills-label {
+    font-family: $font-body;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: $accent;
+  }
+
+  .about-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: $bp-tablet) {
+  .about-panel .about-inner {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+}
+
+@media (max-width: $bp-mobile) {
+  .about-panel {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    align-items: flex-start;
+    padding-top: 2rem;
+  }
+}

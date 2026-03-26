@@ -1,0 +1,102 @@
+.left-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: $nav-width;
+  height: 100vh;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 0;
+  border-right: 1px solid $border;
+  background: rgba(8, 8, 8, 0.72);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  // ── Logo ───────────────────────────────────────────────────────────────────
+  &__logo {
+    font-family: $font-display;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: $accent;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  // ── Links ─────────────────────────────────────────────────────────────────
+  &__links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2.5rem;
+    margin: auto 0;
+    list-style: none;
+  }
+
+  &__link {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-family: $font-body;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: $muted;
+    cursor: pointer;
+    text-decoration: none;
+    background: none;
+    border: none;
+    padding: 0.25rem;
+    transition: color 0.2s ease;
+    white-space: nowrap;
+    user-select: none;
+
+    &:hover { color: $text; }
+    &--active { color: $accent; }
+  }
+
+  // ── Progress bar ──────────────────────────────────────────────────────────
+  &__progress-track {
+    width: 2px;
+    height: 4rem;
+    background: $border;
+    border-radius: 2px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  &__progress-fill {
+    width: 100%;
+    background: $accent;
+    border-radius: 2px;
+    transform-origin: top;
+  }
+}
+
+// ── Mobile — top bar ─────────────────────────────────────────────────────────
+@media (max-width: $bp-mobile) {
+  .left-nav {
+    width: 100vw;
+    height: auto;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0.75rem 1.25rem;
+    border-right: none;
+    border-bottom: 1px solid $border;
+
+    &__links {
+      flex-direction: row;
+      gap: 1.25rem;
+      margin: 0;
+    }
+
+    &__link {
+      writing-mode: horizontal-tb;
+      transform: none;
+    }
+
+    &__progress-track { display: none; }
+  }
+}

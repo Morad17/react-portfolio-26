@@ -1,0 +1,110 @@
+.contact-panel {
+  padding-left: calc($nav-width + 6vw);
+  padding-right: 6vw;
+  align-items: center;
+
+  .contact-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6vw;
+    width: 100%;
+    max-width: 1100px;
+    align-items: start;
+  }
+
+  .contact-left {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .contact-email {
+    font-family: $font-display;
+    font-size: clamp(1.1rem, 2vw, 1.6rem);
+    font-weight: 700;
+    color: $text;
+    text-decoration: none;
+    letter-spacing: -0.01em;
+    transition: color 0.2s ease;
+
+    &:hover { color: $accent; }
+  }
+
+  .contact-tagline {
+    font-size: 0.9rem;
+    color: $muted;
+  }
+
+  // ── Form ─────────────────────────────────────────────────────────────────
+  .contact-right {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .form-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $muted;
+  }
+
+  .form-input,
+  .form-textarea {
+    background: $panel;
+    border: 1px solid $border;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    color: $text;
+    font-family: $font-body;
+    font-size: 0.92rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    width: 100%;
+    outline: none;
+
+    &::placeholder { color: rgba(255, 255, 255, 0.2); }
+
+    &:focus {
+      border-color: $border-active;
+      box-shadow: 0 0 0 3px rgba(255, 122, 0, 0.08);
+    }
+  }
+
+  .form-textarea {
+    min-height: 120px;
+    resize: vertical;
+    font-family: $font-body;
+  }
+
+  .form-status {
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+
+    &--success { color: #4ade80; }
+    &--error   { color: #f87171; }
+    &--sending { color: $muted; }
+  }
+}
+
+@media (max-width: $bp-tablet) {
+  .contact-panel .contact-inner {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+}
+
+@media (max-width: $bp-mobile) {
+  .contact-panel {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    align-items: flex-start;
+    padding-top: 2rem;
+  }
+}

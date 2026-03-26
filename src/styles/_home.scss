@@ -1,0 +1,63 @@
+.home-panel {
+  padding-left: calc($nav-width + 6vw);
+  padding-right: 6vw;
+
+  .home-inner {
+    max-width: 680px;
+  }
+
+  .home-eyebrow {
+    font-family: $font-body;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: $accent;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    &::before {
+      content: '';
+      display: block;
+      width: 2rem;
+      height: 1px;
+      background: $accent;
+      flex-shrink: 0;
+    }
+  }
+
+  .home-title {
+    font-family: $font-display;
+    font-size: clamp(3rem, 6vw, 6rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: $text;
+    margin: 1.25rem 0 1.5rem;
+  }
+
+  .home-sub {
+    font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+    color: $muted;
+    line-height: 1.7;
+    max-width: 44ch;
+    margin-bottom: 2.5rem;
+  }
+
+  .home-ctas {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: $bp-mobile) {
+  .home-panel {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    align-items: flex-start;
+    padding-top: 6rem;
+  }
+}

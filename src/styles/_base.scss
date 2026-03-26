@@ -1,0 +1,167 @@
+// ── Reset & base ─────────────────────────────────────────────────────────────
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: auto; // Locomotive Scroll handles smooth scrolling
+}
+
+body {
+  background: $bg;
+  color: $text;
+  font-family: $font-body;
+  font-weight: 400;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+// ── Scroll container ─────────────────────────────────────────────────────────
+.scroll-wrapper {
+  height: 500vh;
+  position: relative;
+}
+
+.scroll-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.scroll-track {
+  display: flex;
+  width: 500vw;
+  height: 100vh;
+  will-change: transform;
+}
+
+// ── Panel ────────────────────────────────────────────────────────────────────
+.panel {
+  width: 100vw;
+  height: 100vh;
+  flex-shrink: 0;
+  padding-left: $nav-width;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+// ── Section title pattern ─────────────────────────────────────────────────────
+.section-eyebrow {
+  font-family: $font-body;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: $accent;
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  font-family: $font-display;
+  font-size: clamp(2.4rem, 5vw, 4.5rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: $text;
+  margin-bottom: 1.5rem;
+}
+
+.section-lead {
+  font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+  color: $muted;
+  line-height: 1.7;
+  max-width: 44ch;
+}
+
+// ── Tag pill ─────────────────────────────────────────────────────────────────
+.tag {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid $border;
+  border-radius: 100px;
+  color: $muted;
+  background: transparent;
+  transition: border-color 0.2s ease, color 0.2s ease;
+  white-space: nowrap;
+
+  &:hover {
+    border-color: $border-active;
+    color: $accent;
+  }
+}
+
+// ── Button ────────────────────────────────────────────────────────────────────
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: $font-body;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 0.7rem 1.5rem;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  &--primary {
+    background: $accent;
+    color: #000;
+
+    &:hover {
+      box-shadow: 0 8px 24px rgba(255, 122, 0, 0.35);
+    }
+  }
+
+  &--ghost {
+    background: transparent;
+    border-color: $border;
+    color: $text;
+
+    &:hover {
+      border-color: $border-active;
+      box-shadow: 0 8px 24px rgba(255, 122, 0, 0.12);
+    }
+  }
+}
+
+// ── Scrollbar ────────────────────────────────────────────────────────────────
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: $bg; }
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 122, 0, 0.4);
+  border-radius: 10px;
+}
+
+// ── Mobile — vertical stack ──────────────────────────────────────────────────
+@media (max-width: $bp-mobile) {
+  .scroll-wrapper { height: auto; }
+  .scroll-sticky { position: static; overflow: visible; }
+  .scroll-track { flex-direction: column; width: 100vw; height: auto; }
+  .panel {
+    padding-left: 0;
+    padding-top: 5rem;
+    height: auto;
+    min-height: 100vh;
+  }
+}
