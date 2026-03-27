@@ -1,22 +1,22 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import {
   motion,
   useMotionValue,
   useTransform,
   useMotionValueEvent,
   animate,
-} from 'framer-motion';
+} from "framer-motion";
 
-import './styles/index.scss';
+import "./styles/index.scss";
 
-import Navbar from './components/Navbar';
-import CustomCursor from './components/CustomCursor';
-import DotGrid from './components/DotGrid';
-import HomeSection from './sections/HomeSection';
-import AboutSection from './sections/AboutSection';
-import ProjectsSection from './sections/ProjectsSection';
-import ExperienceSection from './sections/ExperienceSection';
-import ContactSection from './sections/ContactSection';
+import Navbar from "./components/Navbar";
+import CustomCursor from "./components/CustomCursor";
+import DotGrid from "./components/DotGrid";
+import HomeSection from "./sections/HomeSection";
+import AboutSection from "./sections/AboutSection";
+import ProjectsSection from "./sections/ProjectsSection";
+import ExperienceSection from "./sections/ExperienceSection";
+import ContactSection from "./sections/ContactSection";
 
 export const PANEL_COUNT = 5;
 
@@ -25,7 +25,7 @@ function App() {
   const [activeIndex, setActiveIndex] = useState(0);
 
   // Keep activeIndex in sync with scroll progress
-  useMotionValueEvent(globalProgress, 'change', (latest) => {
+  useMotionValueEvent(globalProgress, "change", (latest) => {
     const idx = Math.min(
       PANEL_COUNT - 1,
       Math.max(0, Math.round(latest * (PANEL_COUNT - 1))),
@@ -37,7 +37,7 @@ function App() {
   const x = useTransform(
     globalProgress,
     [0, 1],
-    ['0vw', `-${(PANEL_COUNT - 1) * 100}vw`],
+    ["0vw", `-${(PANEL_COUNT - 1) * 100}vw`],
   );
 
   // On mobile: drive globalProgress from vertical scroll so section
@@ -51,9 +51,9 @@ function App() {
       globalProgress.set(progress);
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll(); // set initial value
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [globalProgress]);
 
   useEffect(() => {
@@ -66,7 +66,9 @@ function App() {
       animate(globalProgress, index / (PANEL_COUNT - 1), {
         duration: 0.85,
         ease: [0.76, 0, 0.24, 1],
-        onComplete: () => { isSnapping = false; },
+        onComplete: () => {
+          isSnapping = false;
+        },
       });
     };
 
@@ -81,14 +83,14 @@ function App() {
       if (next !== current) snapTo(next);
     };
 
-    window.addEventListener('wheel', handleWheel, { passive: false });
-    return () => window.removeEventListener('wheel', handleWheel);
+    window.addEventListener("wheel", handleWheel, { passive: false });
+    return () => window.removeEventListener("wheel", handleWheel);
   }, [globalProgress]);
 
   const navigateTo = (index: number) => {
     if (window.innerWidth <= 1100) {
-      const panels = document.querySelectorAll('.panel');
-      panels[index]?.scrollIntoView({ behavior: 'smooth' });
+      const panels = document.querySelectorAll(".panel");
+      panels[index]?.scrollIntoView({ behavior: "smooth" });
       return;
     }
     animate(globalProgress, index / (PANEL_COUNT - 1), {
@@ -102,10 +104,10 @@ function App() {
       <CustomCursor />
       <DotGrid
         dotSize={2}
-        gap={28}
+        gap={20}
         baseColor="#444444"
         activeColor="#ff7a00"
-        proximity={90}
+        proximity={120}
         speedTrigger={300}
         shockRadius={140}
         shockStrength={2}
