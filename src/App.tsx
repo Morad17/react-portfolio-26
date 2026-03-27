@@ -1,12 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   motion,
   useMotionValue,
   useTransform,
   useMotionValueEvent,
+  animate,
 } from 'framer-motion';
-import LocomotiveScroll from 'locomotive-scroll';
-import type Lenis from 'lenis';
 
 import './styles/index.scss';
 
@@ -21,11 +20,10 @@ import ContactSection from './sections/ContactSection';
 export const PANEL_COUNT = 5;
 
 function App() {
-  const locoRef = useRef<LocomotiveScroll | null>(null);
   const globalProgress = useMotionValue(0);
   const [activeIndex, setActiveIndex] = useState(0);
 
-  // Track active section from scroll progress
+  // Keep activeIndex in sync with scroll progress
   useMotionValueEvent(globalProgress, 'change', (latest) => {
     const idx = Math.min(
       PANEL_COUNT - 1,
@@ -34,7 +32,7 @@ function App() {
     setActiveIndex(idx);
   });
 
-  // Horizontal track — map 0→1 progress to 0→-400vw translation
+  // Map 0→1 progress to horizontal translation
   const x = useTransform(
     globalProgress,
     [0, 1],
@@ -42,29 +40,37 @@ function App() {
   );
 
   useEffect(() => {
-    const loco = new LocomotiveScroll({
-      lenisOptions: {
-        lerp: 0.08,
-        smoothWheel: true,
-      },
-      scrollCallback: (lenisInstance: Lenis) => {
-        globalProgress.set(lenisInstance.progress);
-      },
-    });
+    let isSnapping = false;
 
-    locoRef.current = loco;
-
-    return () => {
-      loco.destroy();
-      locoRef.current = null;
+    const snapTo = (index: number) => {
+      isSnapping = true;
+      animate(globalProgress, index / (PANEL_COUNT - 1), {
+        duration: 0.85,
+        ease: [0.76, 0, 0.24, 1],
+        onComplete: () => { isSnapping = false; },
+      });
     };
+
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      if (isSnapping) return;
+
+      const direction = e.deltaY > 0 ? 1 : -1;
+      const current = Math.round(globalProgress.get() * (PANEL_COUNT - 1));
+      const next = Math.max(0, Math.min(PANEL_COUNT - 1, current + direction));
+
+      if (next !== current) snapTo(next);
+    };
+
+    window.addEventListener('wheel', handleWheel, { passive: false });
+    return () => window.removeEventListener('wheel', handleWheel);
   }, [globalProgress]);
 
   const navigateTo = (index: number) => {
-    if (!locoRef.current?.lenisInstance) return;
-    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-    const target = (index / (PANEL_COUNT - 1)) * maxScroll;
-    locoRef.current.lenisInstance.scrollTo(target, { duration: 1.2 });
+    animate(globalProgress, index / (PANEL_COUNT - 1), {
+      duration: 0.85,
+      ease: [0.76, 0, 0.24, 1],
+    });
   };
 
   return (
