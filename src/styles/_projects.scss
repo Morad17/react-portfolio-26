@@ -201,46 +201,52 @@
 }
 
 @media (max-width: $bp-tablet) {
-  .projects-panel .project-bento--website,
-  .projects-panel .project-bento--app {
+  .projects-panel {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    padding-top: 2rem;
+    align-items: flex-start;
+  }
+
+  .projects-panel .project-bento--website {
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto;
     grid-template-areas:
-      "gif  gif "
-      "feat feat"
-      "live code";
+      "gif   gif  "
+      "desc  feat "
+      "skill skill"
+      "live  code ";
   }
 
   .projects-panel .project-bento--app {
+    grid-template-columns: 1fr 1fr;
     grid-template-areas:
-      "gif  .   "
-      "feat feat"
-      ".    code";
+      "gif   desc"
+      "feat  feat"
+      "skill code";
   }
 }
 
 @media (max-width: $bp-mobile) {
-  .projects-panel {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-    align-items: flex-start;
-    padding-top: 2rem;
-  }
-
-  .projects-panel .project-bento--website,
-  .projects-panel .project-bento--app {
+  .projects-panel .project-bento--website {
     grid-template-columns: 1fr;
     grid-template-areas:
-      "gif "
+      "gif"
+      "desc"
       "feat"
+      "skill"
       "live"
       "code";
   }
 
   .projects-panel .project-bento--app {
+    grid-template-columns: 1fr;
     grid-template-areas:
-      "gif "
+      "gif"
+      "desc"
       "feat"
+      "skill"
       "code";
   }
+
+  .projects-panel .bt--gif img { object-fit: contain; }
 }

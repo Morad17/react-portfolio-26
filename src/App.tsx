@@ -40,7 +40,25 @@ function App() {
     ['0vw', `-${(PANEL_COUNT - 1) * 100}vw`],
   );
 
+  // On mobile: drive globalProgress from vertical scroll so section
+  // opacity/parallax transforms still work as the user scrolls down.
   useEffect(() => {
+    if (window.innerWidth > 1100) return;
+
+    const handleScroll = () => {
+      const maxScroll = (PANEL_COUNT - 1) * window.innerHeight;
+      const progress = Math.min(1, Math.max(0, window.scrollY / maxScroll));
+      globalProgress.set(progress);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll(); // set initial value
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [globalProgress]);
+
+  useEffect(() => {
+    if (window.innerWidth <= 1100) return;
+
     let isSnapping = false;
 
     const snapTo = (index: number) => {
@@ -68,6 +86,11 @@ function App() {
   }, [globalProgress]);
 
   const navigateTo = (index: number) => {
+    if (window.innerWidth <= 1100) {
+      const panels = document.querySelectorAll('.panel');
+      panels[index]?.scrollIntoView({ behavior: 'smooth' });
+      return;
+    }
     animate(globalProgress, index / (PANEL_COUNT - 1), {
       duration: 0.85,
       ease: [0.76, 0, 0.24, 1],

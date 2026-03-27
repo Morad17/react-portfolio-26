@@ -70,17 +70,21 @@
 }
 
 @media (max-width: $bp-tablet) {
-  .about-panel .about-inner {
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
-  }
-}
-
-@media (max-width: $bp-mobile) {
   .about-panel {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
     align-items: flex-start;
     padding-top: 2rem;
+
+    .about-inner {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+  }
+}
+
+@media (max-width: $bp-mobile) {
+  .about-panel .skill-model-viewer {
+    height: 150px;
   }
 }

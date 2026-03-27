@@ -100,11 +100,19 @@
   }
 }
 
-@media (max-width: $bp-mobile) {
+@media (max-width: $bp-tablet) {
   .home-panel {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
     align-items: flex-start;
     padding-top: 6rem;
+  }
+}
+
+@media (max-width: $bp-small) {
+  .home-panel {
+    .home-title { font-size: clamp(2.4rem, 12vw, 3.2rem); }
+    .home-line-text { font-size: clamp(1rem, 5.5vw, 1.4rem); }
+    .home-ctas { flex-direction: column; gap: 0.75rem; }
   }
 }

@@ -161,24 +161,29 @@ body {
   border-radius: 10px;
 }
 
-// ── Mobile — vertical stack ──────────────────────────────────────────────────
-@media (max-width: $bp-mobile) {
+// ── Tablet + Mobile — vertical stack ─────────────────────────────────────────
+@media (max-width: $bp-tablet) {
   .scroll-wrapper {
     height: auto;
   }
   .scroll-sticky {
     position: static;
+    height: auto;
     overflow: visible;
   }
   .scroll-track {
     flex-direction: column;
-    width: 100vw;
+    width: 100% !important;
     height: auto;
+    /* neutralise the Framer Motion x-transform on mobile */
+    transform: none !important;
   }
   .panel {
+    width: 100%;
     padding-left: 0;
     padding-top: 5rem;
     height: auto;
-    min-height: 100vh;
+    min-height: 100svh;
+    overflow: visible;
   }
 }

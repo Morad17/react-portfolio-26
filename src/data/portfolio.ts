@@ -32,7 +32,7 @@ export const projects: Project[] = [
     id: "horizon-sales",
     title: "Horizon Sales",
     type: "Website",
-    codeUrl: "#",
+    codeUrl: "https://github.com/Morad17/horizon-ai",
     description:
       "A clean sales and marketing website with an integrated AI chatbot to assist visitors. Built with bespoke client features including an online questionnaire, 5 contact forms, a blog, and secured pages.",
     features: [
@@ -51,7 +51,7 @@ export const projects: Project[] = [
     id: "horizon-app",
     title: "Horizon App",
     type: "App",
-    codeUrl: "#",
+    codeUrl: "https://github.com/Morad17/horizon-app-frontend/",
     description:
       "The app counterpart to Horizon Sales, used for internal business analysis, data collection and goal setting. Managers utilised the app to track sales figures daily and monthly. Also featuring Ai Integration for personal self development.",
     features: [
@@ -63,7 +63,7 @@ export const projects: Project[] = [
       { label: "Live notificaitons" },
     ],
     skills: ["React Native", "Firebase", "Node.js"],
-    url: "https://movie-binge-app.netlify.app/",
+    url: "https://github.com/Morad17/horizon-app-frontend/",
     color: "rgba(0,0,0,0.8)",
   },
 ];

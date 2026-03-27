@@ -75,28 +75,98 @@
   }
 }
 
-// ── Mobile — top bar ─────────────────────────────────────────────────────────
-@media (max-width: $bp-mobile) {
+// ── Burger button (hidden on desktop) ────────────────────────────────────────
+.left-nav__burger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  flex-shrink: 0;
+
+  span {
+    display: block;
+    width: 100%;
+    height: 1.5px;
+    background: $text;
+    border-radius: 2px;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+    transform-origin: center;
+  }
+
+  &--open {
+    span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    span:nth-child(2) { opacity: 0; }
+    span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+  }
+}
+
+// ── Tablet + Mobile — top bar ────────────────────────────────────────────────
+@media (max-width: $bp-tablet) {
   .left-nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
     width: 100vw;
     height: auto;
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 0.75rem 1.25rem;
+    padding: 0.75rem 1.5rem;
     border-right: none;
     border-bottom: 1px solid $border;
+  }
 
-    &__links {
-      flex-direction: row;
-      gap: 1.25rem;
-      margin: 0;
-    }
+  .left-nav__links       { display: none !important; }
+  .left-nav__progress-track { display: none !important; }
+  .left-nav__burger      { display: flex; }
+}
 
-    &__link {
-      writing-mode: horizontal-tb;
-      transform: none;
-    }
+// ── Menu overlay ──────────────────────────────────────────────────────────────
+.nav-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  z-index: 9998;
+  background: rgba(8, 8, 8, 0.97);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid $border;
+  padding: 5rem 2rem 2rem;
+}
 
-    &__progress-track { display: none; }
+.nav-overlay__links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.nav-overlay__link {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: $font-display;
+  font-size: clamp(1.6rem, 6vw, 2.2rem);
+  font-weight: 700;
+  color: $muted;
+  padding: 0.5rem 0;
+  letter-spacing: -0.01em;
+  transition: color 0.2s ease;
+
+  &:hover,
+  &--active { color: $accent; }
+}
+
+@media (max-width: $bp-small) {
+  .left-nav {
+    padding: 0.65rem 1rem;
   }
 }

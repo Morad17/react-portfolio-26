@@ -86,13 +86,17 @@
   }
 }
 
-@media (max-width: $bp-mobile) {
+@media (max-width: $bp-tablet) {
   .experience-panel {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
     align-items: flex-start;
     padding-top: 2rem;
+  }
+}
 
+@media (max-width: $bp-mobile) {
+  .experience-panel {
     .timeline { padding-left: 1.5rem; }
 
     .timeline-item::before {
