@@ -87,7 +87,7 @@ body {
 // ── Tag pill ─────────────────────────────────────────────────────────────────
 .tag {
   display: inline-block;
-  font-size: 0.72rem;
+  font-size: 0.85rem;
   font-weight: 600;
   letter-spacing: 0.04em;
   padding: 0.3rem 0.7rem;
@@ -95,7 +95,9 @@ body {
   border-radius: 100px;
   color: $muted;
   background: transparent;
-  transition: border-color 0.2s ease, color 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease;
   white-space: nowrap;
 
   &:hover {
@@ -118,7 +120,9 @@ body {
   border: 1px solid transparent;
   cursor: pointer;
   text-decoration: none;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 
   &:hover {
     transform: translateY(-2px);
@@ -146,8 +150,12 @@ body {
 }
 
 // ── Scrollbar ────────────────────────────────────────────────────────────────
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: $bg; }
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: $bg;
+}
 ::-webkit-scrollbar-thumb {
   background: rgba(255, 122, 0, 0.4);
   border-radius: 10px;
@@ -155,9 +163,18 @@ body {
 
 // ── Mobile — vertical stack ──────────────────────────────────────────────────
 @media (max-width: $bp-mobile) {
-  .scroll-wrapper { height: auto; }
-  .scroll-sticky { position: static; overflow: visible; }
-  .scroll-track { flex-direction: column; width: 100vw; height: auto; }
+  .scroll-wrapper {
+    height: auto;
+  }
+  .scroll-sticky {
+    position: static;
+    overflow: visible;
+  }
+  .scroll-track {
+    flex-direction: column;
+    width: 100vw;
+    height: auto;
+  }
   .panel {
     padding-left: 0;
     padding-top: 5rem;

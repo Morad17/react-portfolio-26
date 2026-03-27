@@ -27,7 +27,7 @@
   .about-right {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 0.75rem;
   }
 
   .about-skills-label {
@@ -37,12 +37,35 @@
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: $accent;
+
+    &--sub {
+      margin-top: 0.5rem;
+    }
   }
 
   .about-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
+  }
+
+  // ── 3D model viewer ───────────────────────────────────────────────────────
+  .skill-model-viewer {
+    width: 100%;
+    height: 200px;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  // ── Model pill active state ───────────────────────────────────────────────
+  .tag--model {
+    cursor: pointer;
+  }
+
+  .tag--active {
+    background: $accent-soft;
+    border-color: $accent;
+    color: $accent;
   }
 }
 

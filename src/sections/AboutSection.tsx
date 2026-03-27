@@ -1,6 +1,18 @@
+import { useState } from 'react';
 import { motion, useTransform, MotionValue } from 'framer-motion';
-import { skills } from '../data/portfolio';
+import { modelSkills, otherSkills } from '../data/portfolio';
 import { PANEL_COUNT } from '../App';
+import SkillModel from '../components/SkillModel';
+
+const MODEL_MAP: Record<string, string> = {
+  react:      '/models/react_logo.glb',
+  javascript: '/models/javascript_logo__3d_model.glb',
+  typescript: '/models/typescript_logo__3d_model.glb',
+  nodejs:     '/models/node.js_logo__3d_model.glb',
+  aws:        '/models/aws_logo.glb',
+  mysql:      '/models/mySql.glb',
+  github:     '/models/github.glb',
+};
 
 interface AboutSectionProps {
   index: number;
@@ -10,6 +22,7 @@ interface AboutSectionProps {
 
 const AboutSection = ({ index, globalProgress }: AboutSectionProps) => {
   const sectionCenter = index / (PANEL_COUNT - 1);
+  const [activeModel, setActiveModel] = useState('react');
 
   const leftX = useTransform(
     globalProgress,
@@ -39,20 +52,41 @@ const AboutSection = ({ index, globalProgress }: AboutSectionProps) => {
             details.
           </h2>
           <p className="about-bio">
-            Hi, I&rsquo;m Morad — a frontend developer from the UK.
-            Aesthetics, application, and avant-garde thinking are the factors I
-            consider most when designing projects. My tools of choice are
-            primarily React, SCSS &amp; Node, with others implemented based on
-            the project. If you have a project in mind, or a killer idea, send
-            me a message.
+            Hi, I'm Morad — a frontend developer from the UK. My mission
+            is to create practical and aesthetic solutions that help users
+            achieve their goals and push beyond them. If you have a project
+            in mind, or a killer idea, send me a message.
           </p>
         </motion.div>
 
         {/* Right column */}
         <motion.div className="about-right" style={{ x: rightX }}>
           <p className="about-skills-label">Tech &amp; Tools</p>
+
+          {/* 3D model viewer */}
+          <div className="skill-model-viewer">
+            <SkillModel url={MODEL_MAP[activeModel]} />
+          </div>
+
+          {/* Model skill pills */}
           <div className="about-tags">
-            {skills.map((skill) => (
+            {modelSkills.map((skill) => (
+              <motion.span
+                key={skill.model}
+                className={`tag tag--model${activeModel === skill.model ? ' tag--active' : ''}`}
+                onMouseEnter={() => setActiveModel(skill.model)}
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.15 }}
+              >
+                {skill.label}
+              </motion.span>
+            ))}
+          </div>
+
+          {/* Other skills */}
+          <p className="about-skills-label about-skills-label--sub">Other</p>
+          <div className="about-tags">
+            {otherSkills.map((skill) => (
               <motion.span
                 key={skill}
                 className="tag"
