@@ -10,6 +10,7 @@ import {
 import './styles/index.scss';
 
 import Navbar from './components/Navbar';
+import CustomCursor from './components/CustomCursor';
 import DotGrid from './components/DotGrid';
 import HomeSection from './sections/HomeSection';
 import AboutSection from './sections/AboutSection';
@@ -75,7 +76,19 @@ function App() {
 
   return (
     <>
-      <DotGrid />
+      <CustomCursor />
+      <DotGrid
+        dotSize={2}
+        gap={28}
+        baseColor="#444444"
+        activeColor="#ff7a00"
+        proximity={90}
+        speedTrigger={300}
+        shockRadius={140}
+        shockStrength={2}
+        resistance={1400}
+        returnDuration={1.2}
+      />
       <Navbar activeIndex={activeIndex} onNavigate={navigateTo} />
       <div className="scroll-wrapper">
         <div className="scroll-sticky">

@@ -6,87 +6,216 @@
   .projects-inner {
     width: 100%;
     max-width: 1100px;
-  }
-
-  .projects-header {
-    margin-bottom: 2.5rem;
-  }
-
-  .projects-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
+    flex-direction: column;
     gap: 1.5rem;
   }
 
-  // ── Project card ──────────────────────────────────────────────────────────
-  .project-card {
-    border: 1px solid $border;
-    border-radius: 12px;
-    padding: 2rem;
+  .projects-header {
+    margin-bottom: 0;
+
+    .projects-company {
+      font-family: $font-display;
+      font-size: clamp(1.6rem, 3vw, 2.8rem);
+      font-weight: 600;
+      color: $text;
+      margin-bottom: 0.5rem;
+    }
+
+    .projects-desc {
+      font-size: clamp(0.8rem, 1vw, 0.95rem);
+      color: $muted;
+      line-height: 1.7;
+      max-width: 560px;
+    }
+  }
+
+  // ── Tab toggles ───────────────────────────────────────────────────────────
+  .project-tabs {
     display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-    background: $panel;
-    transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+    gap: 0.5rem;
+  }
+
+  .tab-btn {
+    padding: 0.45rem 1.2rem;
+    border: 1px solid $border;
+    border-radius: 999px;
+    background: transparent;
+    color: $muted;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     cursor: pointer;
+    transition:
+      border-color 0.2s,
+      color 0.2s,
+      background 0.2s;
 
     &:hover {
-      border-color: $border-active;
-      transform: translateY(-4px);
-      box-shadow: 0 20px 48px rgba(255, 122, 0, 0.1);
+      border-color: $accent;
+      color: $accent;
     }
 
-    &__name {
-      font-family: $font-display;
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: $text;
+    &.tab-btn--active {
+      border-color: $accent;
+      background: rgba(255, 122, 0, 0.08);
+      color: $accent;
     }
+  }
 
-    &__desc {
-      font-size: 0.9rem;
+  // ── Bento grid container ──────────────────────────────────────────────────
+  .project-bento {
+    display: grid;
+    gap: 0.6rem;
+    width: 100%;
+  }
+
+  // Website tab: gif large left, feat + desc right, buttons bottom
+  .project-bento--website {
+    grid-template-columns: 1.5fr 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+      "gif  gif   desc "
+      "gif  gif   feat "
+      "live code  skill";
+  }
+
+  // App tab: 2-col — gif+skills left, desc+feat+code right
+  .project-bento--app {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+      "gif   desc"
+      "gif   feat"
+      "skill code";
+
+    .bt--gif {
+      max-height: 400px;
+    }
+  }
+
+  // ── Base tile ─────────────────────────────────────────────────────────────
+  .bt {
+    border: 1px solid $border;
+    border-radius: 10px;
+    background: $panel;
+    padding: 0.85rem 1rem;
+    transition: border-color 0.2s ease;
+
+    &:hover {
+      border-color: rgba(255, 122, 0, 0.2);
+    }
+  }
+
+  // ── Area assignments ──────────────────────────────────────────────────────
+  .bt--gif {
+    grid-area: gif;
+    padding: 0;
+    overflow: hidden;
+  }
+  .bt--feat {
+    grid-area: feat;
+  }
+  .bt--desc {
+    grid-area: desc;
+
+    p {
+      font-size: clamp(0.75rem, 0.9vw, 0.88rem);
       color: $muted;
       line-height: 1.65;
     }
+  }
+  .bt--live {
+    grid-area: live;
+    border-color: $border-active;
+  }
+  .bt--code {
+    grid-area: code;
+  }
+  .bt--skills {
+    grid-area: skill;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+  }
 
-    &__features {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-      list-style: none;
-    }
+  .skill-tag {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $accent;
+    border: 1px solid rgba(255, 122, 0, 0.3);
+    border-radius: 999px;
+    padding: 0.2rem 0.65rem;
+  }
 
-    &__feature-item {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.78rem;
+  // ── Gif tile ──────────────────────────────────────────────────────────────
+  .bt--gif img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 9px;
+    display: block;
+  }
+
+  // ── Features tile ─────────────────────────────────────────────────────────
+  .project-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+
+    li {
+      font-size: 0.82rem;
       color: $muted;
     }
+  }
 
-    &__footer {
+  // ── Button tiles ──────────────────────────────────────────────────────────
+  .bt--live,
+  .bt--code {
+    a {
       display: flex;
       align-items: center;
-      justify-content: flex-end;
-      margin-top: auto;
-    }
-
-    &__link {
-      font-size: 0.82rem;
+      justify-content: center;
+      height: 100%;
+      min-height: 2.5rem;
+      font-size: 0.78rem;
       font-weight: 600;
       color: $accent;
       text-decoration: none;
-      letter-spacing: 0.04em;
-      transition: letter-spacing 0.2s ease;
+      letter-spacing: 0.05em;
+      transition:
+        letter-spacing 0.2s ease,
+        color 0.2s ease;
 
-      &:hover { letter-spacing: 0.08em; }
+      &:hover {
+        letter-spacing: 0.1em;
+        color: $text;
+      }
     }
   }
 }
 
 @media (max-width: $bp-tablet) {
-  .projects-panel .projects-grid {
-    grid-template-columns: 1fr;
+  .projects-panel .project-bento--website,
+  .projects-panel .project-bento--app {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+      "gif  gif "
+      "feat feat"
+      "live code";
+  }
+
+  .projects-panel .project-bento--app {
+    grid-template-areas:
+      "gif  .   "
+      "feat feat"
+      ".    code";
   }
 }
 
@@ -96,5 +225,22 @@
     padding-right: 1.5rem;
     align-items: flex-start;
     padding-top: 2rem;
+  }
+
+  .projects-panel .project-bento--website,
+  .projects-panel .project-bento--app {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "gif "
+      "feat"
+      "live"
+      "code";
+  }
+
+  .projects-panel .project-bento--app {
+    grid-template-areas:
+      "gif "
+      "feat"
+      "code";
   }
 }

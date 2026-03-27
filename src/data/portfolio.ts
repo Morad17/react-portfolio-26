@@ -7,10 +7,13 @@ export interface ProjectFeature {
 export interface Project {
   id: string;
   title: string;
+  type: string; // e.g. 'Website' | 'App'
   description: string;
   features: ProjectFeature[];
-  url: string;
-  color: string; // accent colour for card hover
+  skills: string[];
+  url: string; // live page URL
+  codeUrl?: string; // GitHub / code URL
+  color: string;
 }
 
 export interface Experience {
@@ -28,6 +31,8 @@ export const projects: Project[] = [
   {
     id: "horizon-sales",
     title: "Horizon Sales",
+    type: "Website",
+    codeUrl: "#",
     description:
       "A clean sales and marketing website with an integrated AI chatbot to assist visitors. Built with bespoke client features including an online questionnaire, 5 contact forms, a blog, and secured pages.",
     features: [
@@ -38,24 +43,28 @@ export const projects: Project[] = [
       { label: "Responsive Design" },
       { label: "Web & Domain Hosting" },
     ],
-    url: "https://horizon-sales.co.uk/",
+    skills: ["React", "OpenAI"],
+    url: "https://horizon-sales.netlify.app/",
     color: "rgba(0,0,0,0.8)",
   },
   {
-    id: "movie-binge",
-    title: "Movie Binge",
+    id: "horizon-app",
+    title: "Horizon App",
+    type: "App",
+    codeUrl: "#",
     description:
-      "A movie rating platform powered by the TMDB database. Lists latest, trending, and popular films. Users can sign up, rate and review movies, search by genre, and get full movie information.",
+      "The app counterpart to Horizon Sales, used for internal business analysis, data collection and goal setting. Managers utilised the app to track sales figures daily and monthly. Also featuring Ai Integration for personal self development.",
     features: [
       { label: "User Authentication" },
-      { label: "Rate & Review System" },
-      { label: "Like & Bookmark" },
-      { label: "Account Privacy" },
-      { label: "TMDB Integration" },
-      { label: "Responsive Design" },
+      { label: "KPI Figures" },
+      { label: "Goals Setting" },
+      { label: "Ai Helper" },
+      { label: "Day,Week,Month Analysis" },
+      { label: "Live notificaitons" },
     ],
+    skills: ["React Native", "Firebase", "Node.js"],
     url: "https://movie-binge-app.netlify.app/",
-    color: "rgba(136,0,21,0.8)",
+    color: "rgba(0,0,0,0.8)",
   },
 ];
 
@@ -63,10 +72,29 @@ export const projects: Project[] = [
 
 export const experiences: Experience[] = [
   {
+    id: "freelance",
+    role: "Freelance Frontend Developer",
+    company: "Self-employed",
+    period: "2025 – Present",
+    description:
+      "Designing and building bespoke websites and web apps for clients. Delivering full project lifecycle from concept to deployment.",
+    tech: ["React", "Next.js", "TypeScript", "Netlify", "React-Native"],
+  },
+  {
+    id: "rfid",
+    role: "Web Developer",
+    company: "RFID Solutions",
+    period: "2024 – 2025",
+    description:
+      "Built and maintained internal web tools and customer-facing dashboards for an RFID technology company. Focused on performant UIs and clean REST API integrations.",
+    tech: ["React", "TypeScript", "SCSS", "REST APIs", "Git", "Figma"],
+  },
+
+  {
     id: "diploma",
     role: "Full Stack Web Development Diploma",
     company: "Code Institute",
-    period: "2022 – 2023",
+    period: "2022 – 2024",
     description:
       "Completed an accredited full stack diploma covering front-end and back-end technologies, agile methodologies, and real-world project delivery.",
     tech: [
@@ -80,33 +108,6 @@ export const experiences: Experience[] = [
       "Django",
     ],
   },
-  {
-    id: "rfid",
-    role: "Web Developer",
-    company: "RFID Solutions",
-    period: "2023 – 2024",
-    description:
-      "Built and maintained internal web tools and customer-facing dashboards for an RFID technology company. Focused on performant UIs and clean REST API integrations.",
-    tech: ["React", "TypeScript", "SCSS", "REST APIs", "Git", "Figma"],
-  },
-  {
-    id: "freelance",
-    role: "Freelance Frontend Developer",
-    company: "Self-employed",
-    period: "2024 – Present",
-    description:
-      "Designing and building bespoke websites and web apps for clients across the UK. Delivering full project lifecycle from concept to deployment.",
-    tech: [
-      "React",
-      "Next.js",
-      "TypeScript",
-      "SCSS",
-      "Vercel",
-      "Netlify",
-      "EmailJS",
-      "Framer Motion",
-    ],
-  },
 ];
 
 // ── Skills ────────────────────────────────────────────────────────────────────
@@ -117,17 +118,21 @@ export interface ModelSkill {
 }
 
 export const modelSkills: ModelSkill[] = [
-  { label: 'React',      model: 'react'      },
-  { label: 'JavaScript', model: 'javascript' },
-  { label: 'TypeScript', model: 'typescript' },
-  { label: 'Node.js',    model: 'nodejs'     },
-  { label: 'AWS',        model: 'aws'        },
-  { label: 'MySQL',      model: 'mysql'      },
-  { label: 'GitHub',     model: 'github'     },
+  { label: "React", model: "react" },
+  { label: "JavaScript", model: "javascript" },
+  { label: "TypeScript", model: "typescript" },
+  { label: "Node.js", model: "nodejs" },
+  { label: "AWS", model: "aws" },
+  { label: "MySQL", model: "mysql" },
+  { label: "GitHub", model: "github" },
 ];
 
 export const otherSkills: string[] = [
-  'React Native', 'Next.js', 'SCSS', 'Firestore', 'Figma',
+  "React Native",
+  "Next.js",
+  "SCSS",
+  "Firestore",
+  "Figma",
 ];
 
 // ── Nav items ─────────────────────────────────────────────────────────────────
