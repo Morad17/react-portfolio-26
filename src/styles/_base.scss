@@ -169,6 +169,11 @@ body {
   margin-top: -16px;
   margin-left: -16px;
   will-change: transform;
+  transition: opacity 0.2s ease;
+}
+
+body.cursor--on-portrait .custom-cursor {
+  opacity: 0;
 }
 
 // ── Dot grid ──────────────────────────────────────────────────────────────────

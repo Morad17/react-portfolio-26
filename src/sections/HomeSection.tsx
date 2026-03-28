@@ -1,5 +1,8 @@
 import { motion, useTransform, MotionValue } from "framer-motion";
+import { useRef, useState } from "react";
 import { PANEL_COUNT } from "../App";
+import meSmart from "../assets/images/me-smart.jpeg";
+import meElephants from "../assets/images/me-elephants.jpeg";
 
 interface HomeSectionProps {
   index: number;
@@ -22,6 +25,16 @@ const HomeSection = ({
   onNavigate,
 }: HomeSectionProps) => {
   const sectionCenter = index / (PANEL_COUNT - 1);
+  const imageRef = useRef<HTMLDivElement>(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+  const revealSize = isHovered ? 260 : 0;
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = imageRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    setMousePos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+  };
 
   const contentY = useTransform(
     globalProgress,
@@ -72,6 +85,7 @@ const HomeSection = ({
         className="home-inner"
         style={{ y: contentY, opacity: contentOpacity }}
       >
+        <div className="home-content">
         {/* Title */}
         <motion.div
           className="home-title-wrap"
@@ -162,6 +176,47 @@ const HomeSection = ({
             Start a Project →
           </button>
         </motion.div>
+        </div>{/* end home-content */}
+
+        {/* Portrait with mask reveal */}
+        <motion.div
+          className="home-portrait"
+          initial={{ opacity: 0, scale: 0.92 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.7, delay: 0.5, ease: "easeOut" }}
+        >
+          <div
+            className="home-portrait-circle"
+            ref={imageRef}
+            onMouseMove={handleMouseMove}
+            onMouseEnter={() => {
+              setIsHovered(true);
+              document.body.classList.add("cursor--on-portrait");
+            }}
+            onMouseLeave={() => {
+              setIsHovered(false);
+              document.body.classList.remove("cursor--on-portrait");
+            }}
+          >
+            {/* Base image — always visible */}
+            <img src={meSmart} alt="Morad Elb" className="home-portrait-img" />
+            {/* Reveal overlay — me-elephants, masked to follow cursor */}
+            <motion.div
+              className="home-portrait-reveal"
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              animate={{
+                WebkitMaskPosition: `${mousePos.x - revealSize / 2}px ${mousePos.y - revealSize / 2}px`,
+                maskPosition: `${mousePos.x - revealSize / 2}px ${mousePos.y - revealSize / 2}px`,
+                WebkitMaskSize: `${revealSize}px`,
+                maskSize: `${revealSize}px`,
+              } as any}
+              transition={{ type: "tween", ease: "backOut", duration: 0.4 }}
+            >
+              <img src={meElephants} alt="" className="home-portrait-img" />
+            </motion.div>
+          </div>
+        </motion.div>
+
       </motion.div>
     </section>
   );
