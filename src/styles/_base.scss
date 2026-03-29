@@ -94,7 +94,7 @@ body {
   border: 1px solid $border;
   border-radius: 100px;
   color: $muted;
-  background: transparent;
+  background: $panel;
   transition:
     border-color 0.2s ease,
     color 0.2s ease;

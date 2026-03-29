@@ -4,9 +4,9 @@ import { useForm } from "react-hook-form";
 import emailjs from "@emailjs/browser";
 import { PANEL_COUNT } from "../App";
 
-const SERVICE_ID = "service_namecheap";
-const TEMPLATE_ID = "template_morad_ink";
-const PUBLIC_KEY = "EDluZEzYjp8dWFuTk";
+const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
 type FormValues = {
   name: string;

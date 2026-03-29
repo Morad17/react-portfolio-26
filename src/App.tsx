@@ -64,8 +64,8 @@ function App() {
     const snapTo = (index: number) => {
       isSnapping = true;
       animate(globalProgress, index / (PANEL_COUNT - 1), {
-        duration: 0.85,
-        ease: [0.76, 0, 0.24, 1],
+        duration: 1,
+        ease: [0.45, 0, 0.35, 1],
         onComplete: () => {
           isSnapping = false;
         },
@@ -94,7 +94,7 @@ function App() {
       return;
     }
     animate(globalProgress, index / (PANEL_COUNT - 1), {
-      duration: 0.85,
+      duration: 1.4,
       ease: [0.76, 0, 0.24, 1],
     });
   };
