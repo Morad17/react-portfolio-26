@@ -199,7 +199,17 @@ const HomeSection = ({
               animate={{ clipPath: "inset(0% 0 0 0)" }}
               transition={{ duration: 0.7, delay: 0.3, ease: "easeInOut" }}
             />
-            <p className="home-eyebrow">Frontend Developer</p>
+            <p className="home-eyebrow">
+              <motion.span
+                style={{ display: "inline-block" }}
+                initial={{ scaleX: -1 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 1, delay: 1, ease: "easeInOut" }}
+              >
+                Frontend
+              </motion.span>{" "}
+              Developer
+            </p>
           </motion.div>
 
           {/* Staggered text lines */}
@@ -234,6 +244,13 @@ const HomeSection = ({
                       <motion.span
                         key={i}
                         className="home-line-highlight"
+                        initial={{ opacity: 0, y: 18 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{
+                          duration: 0.9,
+                          delay: line.delay + 0.5,
+                          ease: "easeOut",
+                        }}
                         whileHover={{
                           scale: 1.1,
                           color: "#a855f7",
