@@ -176,6 +176,24 @@ body.cursor--on-portrait .custom-cursor {
   opacity: 0;
 }
 
+// ── Car canvas ────────────────────────────────────────────────────────────────
+.car-canvas-wrap {
+  position: fixed;
+  bottom: 0;
+  left: 100%;
+  transform: translateX(-100%);
+  width: 1920px;
+  height: 1000px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+@media (max-width: 1100px) {
+  .car-canvas-wrap {
+    display: none;
+  }
+}
+
 // ── Dot grid ──────────────────────────────────────────────────────────────────
 .dot-grid {
   position: fixed;

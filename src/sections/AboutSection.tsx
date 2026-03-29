@@ -1,17 +1,17 @@
-import { useState } from 'react';
-import { motion, useTransform, MotionValue } from 'framer-motion';
-import { modelSkills, otherSkills } from '../data/portfolio';
-import { PANEL_COUNT } from '../App';
-import SkillModel from '../components/SkillModel';
+import { useState } from "react";
+import { motion, useTransform, MotionValue } from "framer-motion";
+import { modelSkills, otherSkills } from "../data/portfolio";
+import { PANEL_COUNT } from "../App";
+import SkillModel from "../components/SkillModel";
 
 const MODEL_MAP: Record<string, string> = {
-  react:      '/models/react_logo.glb',
-  javascript: '/models/javascript_logo__3d_model.glb',
-  typescript: '/models/typescript_logo__3d_model.glb',
-  nodejs:     '/models/node.js_logo__3d_model.glb',
-  aws:        '/models/aws_logo.glb',
-  mysql:      '/models/mySql.glb',
-  github:     '/models/github.glb',
+  react: "/models/react_logo.glb",
+  javascript: "/models/javascript_logo__3d_model.glb",
+  typescript: "/models/typescript_logo__3d_model.glb",
+  nodejs: "/models/node.js_logo__3d_model.glb",
+  aws: "/models/aws_logo.glb",
+  mysql: "/models/mySql.glb",
+  github: "/models/github.glb",
 };
 
 interface AboutSectionProps {
@@ -22,7 +22,7 @@ interface AboutSectionProps {
 
 const AboutSection = ({ index, globalProgress }: AboutSectionProps) => {
   const sectionCenter = index / (PANEL_COUNT - 1);
-  const [activeModel, setActiveModel] = useState('react');
+  const [activeModel, setActiveModel] = useState("react");
 
   const leftX = useTransform(
     globalProgress,
@@ -51,12 +51,17 @@ const AboutSection = ({ index, globalProgress }: AboutSectionProps) => {
             <br />
             details.
           </h2>
-          <p className="about-bio">
-            Hi, I'm Morad — a frontend developer from the UK. My mission
-            is to create practical and aesthetic solutions that help users
-            achieve their goals and push beyond them. If you have a project
-            in mind, or a killer idea, send me a message.
-          </p>
+          <br />
+          <div className="about-bio">
+            <p className="about-bio-start">Hi, I'm Morad</p>
+            <p className="about-bio-text">
+              A frontend developer from the UK. My mission is to create
+              practical and aesthetic projects that help users achieve their
+              goals and push beyond them. Nothing is too far fetched to achieve.
+              If you have a project in mind, or a killer idea, send me a
+              message.
+            </p>
+          </div>
         </motion.div>
 
         {/* Right column */}
@@ -73,7 +78,7 @@ const AboutSection = ({ index, globalProgress }: AboutSectionProps) => {
             {modelSkills.map((skill) => (
               <motion.span
                 key={skill.model}
-                className={`tag tag--model${activeModel === skill.model ? ' tag--active' : ''}`}
+                className={`tag tag--model${activeModel === skill.model ? " tag--active" : ""}`}
                 onMouseEnter={() => setActiveModel(skill.model)}
                 whileHover={{ scale: 1.05 }}
                 transition={{ duration: 0.15 }}

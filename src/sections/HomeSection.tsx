@@ -1,8 +1,8 @@
-import { motion, useTransform, MotionValue } from "framer-motion";
-import { useRef, useState } from "react";
+import { motion, useTransform, MotionValue, useAnimate } from "framer-motion";
+import { useRef } from "react";
 import { PANEL_COUNT } from "../App";
-import meSmart from "../assets/images/me-smart.jpeg";
-import meElephants from "../assets/images/me-elephants.jpeg";
+import smartPhoto from "../assets/images/smartPhoto.jpeg";
+import holidayPhotos from "../assets/images/holidayPhoto.jpeg";
 
 interface HomeSectionProps {
   index: number;
@@ -26,14 +26,96 @@ const HomeSection = ({
 }: HomeSectionProps) => {
   const sectionCenter = index / (PANEL_COUNT - 1);
   const imageRef = useRef<HTMLDivElement>(null);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [isHovered, setIsHovered] = useState(false);
-  const revealSize = isHovered ? 260 : 0;
+  const [revealScope, animateReveal] = useAnimate();
+  const isHoveredRef = useRef(false);
+  const SIZE = 260;
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseEnter = async (e: React.MouseEvent<HTMLDivElement>) => {
+    isHoveredRef.current = true;
+    document.body.classList.add("cursor--on-portrait");
     const rect = imageRef.current?.getBoundingClientRect();
     if (!rect) return;
-    setMousePos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    // Instantly place at entry point so it never slides from a previous exit position
+    await animateReveal(
+      revealScope.current,
+      {
+        WebkitMaskPosition: `${x - SIZE / 2}px ${y - SIZE / 2}px`,
+        maskPosition: `${x - SIZE / 2}px ${y - SIZE / 2}px`,
+      },
+      { duration: 0 },
+    );
+    // Then expand from that spot
+    animateReveal(
+      revealScope.current,
+      {
+        WebkitMaskSize: `${SIZE}px`,
+        maskSize: `${SIZE}px`,
+      },
+      { type: "tween", ease: "backOut", duration: 0.4 },
+    );
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!isHoveredRef.current) return;
+    const rect = imageRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    animateReveal(
+      revealScope.current,
+      {
+        WebkitMaskPosition: `${x - SIZE / 2}px ${y - SIZE / 2}px`,
+        maskPosition: `${x - SIZE / 2}px ${y - SIZE / 2}px`,
+      },
+      { type: "tween", ease: "backOut", duration: 0.15 },
+    );
+  };
+
+  const handleMouseLeave = async (e: React.MouseEvent<HTMLDivElement>) => {
+    isHoveredRef.current = false;
+    document.body.classList.remove("cursor--on-portrait");
+    const rect = imageRef.current?.getBoundingClientRect();
+    if (!rect) return;
+
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    // Find which edge was crossed
+    const dLeft = x;
+    const dRight = rect.width - x;
+    const dTop = y;
+    const dBottom = rect.height - y;
+    const min = Math.min(dLeft, dRight, dTop, dBottom);
+
+    let exitX = x - SIZE / 2;
+    let exitY = y - SIZE / 2;
+    if (min === dLeft) exitX = -SIZE;
+    else if (min === dRight) exitX = rect.width;
+    else if (min === dTop) exitY = -SIZE;
+    else exitY = rect.height;
+
+    // Slide to edge, then collapse
+    await animateReveal(
+      revealScope.current,
+      {
+        WebkitMaskPosition: `${exitX}px ${exitY}px`,
+        maskPosition: `${exitX}px ${exitY}px`,
+      },
+      { duration: 0.18, ease: "easeIn" },
+    );
+
+    if (!isHoveredRef.current) {
+      animateReveal(
+        revealScope.current,
+        {
+          WebkitMaskSize: "0px",
+          maskSize: "0px",
+        },
+        { duration: 0.15, ease: "easeOut" },
+      );
+    }
   };
 
   const contentY = useTransform(
@@ -51,9 +133,11 @@ const HomeSection = ({
     {
       id: "line1",
       parts: [
-        "Where ",
-        { text: "creativity", highlight: true },
-        " meets code.",
+        "From ",
+        { text: "concept", highlight: true },
+        " to ",
+        { text: "project", highlight: true },
+        ".",
       ],
       delay: 0.4,
     },
@@ -86,97 +170,102 @@ const HomeSection = ({
         style={{ y: contentY, opacity: contentOpacity }}
       >
         <div className="home-content">
-        {/* Title */}
-        <motion.div
-          className="home-title-wrap"
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
-        >
-          <motion.span
-            className="home-bar"
-            initial={{ clipPath: "inset(100% 0 0 0)" }}
-            animate={{ clipPath: "inset(0% 0 0 0)" }}
-            transition={{ duration: 0.7, delay: 0.15, ease: "easeInOut" }}
-          />
-          <h1 className="home-title">Morad Elb</h1>
-        </motion.div>
+          {/* Title */}
+          <motion.div
+            className="home-title-wrap"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
+          >
+            <motion.span
+              className="home-bar"
+              initial={{ clipPath: "inset(100% 0 0 0)" }}
+              animate={{ clipPath: "inset(0% 0 0 0)" }}
+              transition={{ duration: 0.7, delay: 0.15, ease: "easeInOut" }}
+            />
+            <h1 className="home-title">Morad Elb</h1>
+          </motion.div>
 
-        {/* Eyebrow */}
-        <motion.div
-          className="home-eyebrow-wrap"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.25, ease: "easeOut" }}
-        >
-          <motion.span
-            className="home-bar"
-            initial={{ clipPath: "inset(100% 0 0 0)" }}
-            animate={{ clipPath: "inset(0% 0 0 0)" }}
-            transition={{ duration: 0.7, delay: 0.3, ease: "easeInOut" }}
-          />
-          <p className="home-eyebrow">Frontend Development</p>
-        </motion.div>
+          {/* Eyebrow */}
+          <motion.div
+            className="home-eyebrow-wrap"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.25, ease: "easeOut" }}
+          >
+            <motion.span
+              className="home-bar"
+              initial={{ clipPath: "inset(100% 0 0 0)" }}
+              animate={{ clipPath: "inset(0% 0 0 0)" }}
+              transition={{ duration: 0.7, delay: 0.3, ease: "easeInOut" }}
+            />
+            <p className="home-eyebrow">Frontend Developer</p>
+          </motion.div>
 
-        {/* Staggered text lines */}
-        <div className="home-lines">
-          {textLines.map((line) => (
-            <motion.div
-              key={line.id}
-              className="home-line-wrap"
-              initial={{ opacity: 0, y: 35 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: line.delay, ease: "easeOut" }}
-            >
-              <motion.span
-                className="home-bar"
-                initial={{ clipPath: "inset(100% 0 0 0)" }}
-                animate={{ clipPath: "inset(0% 0 0 0)" }}
+          {/* Staggered text lines */}
+          <div className="home-lines">
+            {textLines.map((line) => (
+              <motion.div
+                key={line.id}
+                className="home-line-wrap"
+                initial={{ opacity: 0, y: 35 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{
-                  duration: 0.7,
-                  delay: line.delay + 0.05,
-                  ease: "easeInOut",
+                  duration: 0.6,
+                  delay: line.delay,
+                  ease: "easeOut",
                 }}
-              />
-              <h3 className="home-line-text">
-                {line.parts.map((part, i) =>
-                  typeof part === "string" ? (
-                    <span key={i}>{part}</span>
-                  ) : (
-                    <motion.span
-                      key={i}
-                      className="home-line-highlight"
-                      whileHover={{
-                        scale: 1.1,
-                        color: "#a855f7",
-                        textShadow: "0 0 15px rgba(168, 85, 247, 0.8)",
-                      }}
-                      style={{ display: "inline-block", cursor: "pointer" }}
-                    >
-                      {part.text}
-                    </motion.span>
-                  ),
-                )}
-              </h3>
-            </motion.div>
-          ))}
-        </div>
+              >
+                <motion.span
+                  className="home-bar"
+                  initial={{ clipPath: "inset(100% 0 0 0)" }}
+                  animate={{ clipPath: "inset(0% 0 0 0)" }}
+                  transition={{
+                    duration: 0.7,
+                    delay: line.delay + 0.05,
+                    ease: "easeInOut",
+                  }}
+                />
+                <h3 className="home-line-text">
+                  {line.parts.map((part, i) =>
+                    typeof part === "string" ? (
+                      <span key={i}>{part}</span>
+                    ) : (
+                      <motion.span
+                        key={i}
+                        className="home-line-highlight"
+                        whileHover={{
+                          scale: 1.1,
+                          color: "#a855f7",
+                          textShadow: "0 0 15px rgba(168, 85, 247, 0.8)",
+                        }}
+                        style={{ display: "inline-block", cursor: "pointer" }}
+                      >
+                        {part.text}
+                      </motion.span>
+                    ),
+                  )}
+                </h3>
+              </motion.div>
+            ))}
+          </div>
 
-        {/* CTAs */}
-        <motion.div
-          className="home-ctas"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1.05, ease: "easeOut" }}
-        >
-          <button className="btn btn--primary" onClick={() => onNavigate(2)}>
-            View Work →
-          </button>
-          <button className="btn btn--ghost" onClick={() => onNavigate(4)}>
-            Start a Project →
-          </button>
-        </motion.div>
-        </div>{/* end home-content */}
+          {/* CTAs */}
+          <motion.div
+            className="home-ctas"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 1.05, ease: "easeOut" }}
+          >
+            <button className="btn btn--primary" onClick={() => onNavigate(2)}>
+              View Work →
+            </button>
+            <button className="btn btn--ghost" onClick={() => onNavigate(4)}>
+              Start a Project →
+            </button>
+          </motion.div>
+        </div>
+        {/* end home-content */}
 
         {/* Portrait with mask reveal */}
         <motion.div
@@ -189,34 +278,30 @@ const HomeSection = ({
             className="home-portrait-circle"
             ref={imageRef}
             onMouseMove={handleMouseMove}
-            onMouseEnter={() => {
-              setIsHovered(true);
-              document.body.classList.add("cursor--on-portrait");
-            }}
-            onMouseLeave={() => {
-              setIsHovered(false);
-              document.body.classList.remove("cursor--on-portrait");
-            }}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
           >
             {/* Base image — always visible */}
-            <img src={meSmart} alt="Morad Elb" className="home-portrait-img" />
-            {/* Reveal overlay — me-elephants, masked to follow cursor */}
+            <img
+              src={smartPhoto}
+              alt="Morad Elb"
+              className="home-portrait-img"
+            />
+            {/* Reveal overlay — Holiday Photo, masked to follow cursor */}
             <motion.div
+              ref={revealScope}
               className="home-portrait-reveal"
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              animate={{
-                WebkitMaskPosition: `${mousePos.x - revealSize / 2}px ${mousePos.y - revealSize / 2}px`,
-                maskPosition: `${mousePos.x - revealSize / 2}px ${mousePos.y - revealSize / 2}px`,
-                WebkitMaskSize: `${revealSize}px`,
-                maskSize: `${revealSize}px`,
-              } as any}
-              transition={{ type: "tween", ease: "backOut", duration: 0.4 }}
+              style={{
+                WebkitMaskPosition: "0px 0px",
+                maskPosition: "0px 0px",
+                WebkitMaskSize: "0px",
+                maskSize: "0px",
+              }}
             >
-              <img src={meElephants} alt="" className="home-portrait-img" />
+              <img src={holidayPhotos} alt="" className="home-portrait-img" />
             </motion.div>
           </div>
         </motion.div>
-
       </motion.div>
     </section>
   );

@@ -6,9 +6,9 @@
   .about-inner {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 6vw;
+    gap: 5vw;
     width: 100%;
-    max-width: 1100px;
+    max-width: 1200px;
   }
 
   .about-left {
@@ -17,13 +17,20 @@
     gap: 1.5rem;
   }
 
-  .about-bio {
-    font-size: clamp(1rem, 1.35vw, 1.15rem);
+  .about-bio-text {
+    font-size: clamp(1rem, 1.35vw, 1.05rem);
     color: $muted;
     line-height: 1.75;
     max-width: 50ch;
+    word-spacing: 3px;
   }
-
+  .about-bio-start {
+    font-family: $font-display;
+    font-weight: 700;
+    color: $text;
+    font-size: clamp(2rem, 1.35vw, 1.15rem);
+    word-spacing: 3px;
+  }
   .about-right {
     display: flex;
     flex-direction: column;

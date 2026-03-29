@@ -41,7 +41,7 @@ interface SkillModelProps {
 
 export default function SkillModel({ url }: SkillModelProps) {
   return (
-    <Canvas camera={{ position: [0, 0, 4] }}>
+    <Canvas style={{ width: "100%" }} camera={{ position: [0, 0, 4] }}>
       <Suspense fallback={null}>
         <Environment preset="city" />
         <Model url={url} />
