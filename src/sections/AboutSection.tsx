@@ -1,5 +1,12 @@
 import { useState, useRef, useEffect } from "react";
-import { motion, useTransform, MotionValue, Variants, useMotionValueEvent } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useTransform,
+  MotionValue,
+  Variants,
+  useMotionValueEvent,
+} from "framer-motion";
 import { modelSkills, otherSkills } from "../data/portfolio";
 import { PANEL_COUNT } from "../App";
 import { useIsMobile } from "../hooks/useIsMobile";
@@ -16,6 +23,8 @@ const MODEL_MAP: Record<string, string> = {
 };
 
 const LOCO_EASE = [0.25, 0.46, 0.45, 0.94] as const;
+
+const CYCLE_WORDS = ["innovation", "aesthetics", "ideas", "details"];
 
 type ItemCustom = { y?: number; delay?: number; duration?: number };
 type TagsCustom = { delayChildren?: number };
@@ -51,14 +60,35 @@ interface AboutSectionProps {
   isActive: boolean;
 }
 
-const AboutSection = ({ index, globalProgress, isActive }: AboutSectionProps) => {
+const AboutSection = ({
+  index,
+  globalProgress,
+  isActive,
+}: AboutSectionProps) => {
   const sectionCenter = index / (PANEL_COUNT - 1);
   const isMobile = useIsMobile();
   const isMobileRef = useRef(isMobile);
-  useEffect(() => { isMobileRef.current = isMobile; }, [isMobile]);
+  useEffect(() => {
+    isMobileRef.current = isMobile;
+  }, [isMobile]);
 
   const [activeModel, setActiveModel] = useState("react");
   const [isHere, setIsHere] = useState(false);
+  const [wordIndex, setWordIndex] = useState(0);
+  const cycleStarted = useRef(false);
+
+  useEffect(() => {
+    const shouldStart = isMobile ? isActive : isHere;
+    if (!shouldStart || cycleStarted.current) return;
+    cycleStarted.current = true;
+    let i = 0;
+    const advance = () => {
+      i++;
+      setWordIndex(i);
+      if (i < CYCLE_WORDS.length - 1) setTimeout(advance, 1100);
+    };
+    setTimeout(advance, 700);
+  }, [isHere, isActive, isMobile]);
 
   useMotionValueEvent(globalProgress, "change", (latest) => {
     if (isMobileRef.current) return;
@@ -100,19 +130,49 @@ const AboutSection = ({ index, globalProgress, isActive }: AboutSectionProps) =>
           <div className={`about-left mob-animate ${vis}`}>
             <p className="section-eyebrow">About Me</p>
             <h2 className="section-title">
-              Built for the<br />details.
+              Built for the
+              <br />
+              <span className="cycling-word-wrapper">
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={wordIndex}
+                    className="cycling-word"
+                    initial={{ y: "110%" }}
+                    animate={{
+                      y: 0,
+                      transition: {
+                        type: "spring",
+                        stiffness: 480,
+                        damping: 38,
+                      },
+                    }}
+                    exit={{
+                      y: "-110%",
+                      transition: { duration: 0.22, ease: [0.4, 0, 1, 1] },
+                    }}
+                  >
+                    {CYCLE_WORDS[wordIndex]}
+                    <span style={{ color: "#ff7a00" }}>.</span>
+                  </motion.span>
+                </AnimatePresence>
+              </span>
             </h2>
             <div className="about-bio">
               <p className="about-bio-start">Hi, I'm Morad</p>
               <p className="about-bio-text">
                 {bioLines.map((line, i) => (
-                  <span key={i} style={{ display: "block" }}>{line}</span>
+                  <span key={i} style={{ display: "block" }}>
+                    {line}
+                  </span>
                 ))}
               </p>
             </div>
           </div>
 
-          <div className={`about-right mob-animate ${vis}`} style={{ transitionDelay: "0.1s" }}>
+          <div
+            className={`about-right mob-animate ${vis}`}
+            style={{ transitionDelay: "0.1s" }}
+          >
             <p className="about-skills-label">Tech &amp; Tools</p>
 
             <div className="skill-model-viewer">
@@ -135,7 +195,9 @@ const AboutSection = ({ index, globalProgress, isActive }: AboutSectionProps) =>
 
             <div className="about-tags">
               {otherSkills.map((skill) => (
-                <span key={skill} className="tag">{skill}</span>
+                <span key={skill} className="tag">
+                  {skill}
+                </span>
               ))}
             </div>
           </div>
@@ -147,7 +209,6 @@ const AboutSection = ({ index, globalProgress, isActive }: AboutSectionProps) =>
   return (
     <section className="panel about-panel" aria-label="About">
       <motion.div className="about-inner" style={{ opacity }}>
-
         <motion.div
           className="about-left"
           style={{ x: leftX }}
@@ -169,7 +230,21 @@ const AboutSection = ({ index, globalProgress, isActive }: AboutSectionProps) =>
           >
             Built for the
             <br />
-            details.
+            <span className="cycling-word-wrapper">
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={wordIndex}
+                  className="cycling-word"
+                  initial={{ y: "110%" }}
+                  animate={{ y: 0 }}
+                  exit={{ y: "-110%" }}
+                  transition={{ duration: 0.38, ease: LOCO_EASE }}
+                >
+                  {CYCLE_WORDS[wordIndex]}
+                  <span style={{ color: "#ff7a00" }}>.</span>
+                </motion.span>
+              </AnimatePresence>
+            </span>
           </motion.h2>
           <div className="about-bio">
             <motion.p
@@ -226,7 +301,11 @@ const AboutSection = ({ index, globalProgress, isActive }: AboutSectionProps) =>
               <motion.span
                 key={skill.model}
                 variants={itemVariants}
-                custom={{ y: 22 + i * 6, delay: i * 0.1, duration: 0.55 + i * 0.03 }}
+                custom={{
+                  y: 22 + i * 6,
+                  delay: i * 0.1,
+                  duration: 0.55 + i * 0.03,
+                }}
                 className={`tag tag--model${activeModel === skill.model ? " tag--active" : ""}`}
                 onMouseEnter={() => setActiveModel(skill.model)}
                 whileHover={{ scale: 1.05, transition: { duration: 0.15 } }}
@@ -253,7 +332,11 @@ const AboutSection = ({ index, globalProgress, isActive }: AboutSectionProps) =>
               <motion.span
                 key={skill}
                 variants={itemVariants}
-                custom={{ y: 22 + i * 6, delay: i * 0.1, duration: 0.55 + i * 0.03 }}
+                custom={{
+                  y: 22 + i * 6,
+                  delay: i * 0.1,
+                  duration: 0.55 + i * 0.03,
+                }}
                 className="tag"
                 whileHover={{ scale: 1.05, transition: { duration: 0.15 } }}
               >
@@ -262,7 +345,6 @@ const AboutSection = ({ index, globalProgress, isActive }: AboutSectionProps) =>
             ))}
           </motion.div>
         </motion.div>
-
       </motion.div>
     </section>
   );

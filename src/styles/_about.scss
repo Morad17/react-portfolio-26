@@ -17,6 +17,16 @@
     gap: 1.5rem;
   }
 
+  .cycling-word-wrapper {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+  }
+
+  .cycling-word {
+    display: inline-block;
+  }
+
   .about-bio-text {
     font-size: clamp(1rem, 1.35vw, 1.05rem);
     color: $muted;
