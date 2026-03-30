@@ -51,7 +51,7 @@ export const projects: Project[] = [
     id: "horizon-app",
     title: "Horizon App",
     type: "App",
-    codeUrl: "https://github.com/Morad17/horizon-app-frontend/",
+    codeUrl: "https://github.com/Morad17/",
     description:
       "The app counterpart to Horizon Sales, used for internal business analysis, data collection and goal setting. Managers utilised the app to track sales figures daily and monthly. Also featuring Ai Integration for personal self development.",
     features: [

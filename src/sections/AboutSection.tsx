@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, useTransform, MotionValue, Variants, useMotionValueEvent } from "framer-motion";
 import { modelSkills, otherSkills } from "../data/portfolio";
 import { PANEL_COUNT } from "../App";
+import { useIsMobile } from "../hooks/useIsMobile";
 import SkillModel from "../components/SkillModel";
 
 const MODEL_MAP: Record<string, string> = {
@@ -14,13 +15,11 @@ const MODEL_MAP: Record<string, string> = {
   github: "/models/github.glb",
 };
 
-// Locomotive Scroll characteristic ease — smooth, weighted deceleration
 const LOCO_EASE = [0.25, 0.46, 0.45, 0.94] as const;
 
 type ItemCustom = { y?: number; delay?: number; duration?: number };
 type TagsCustom = { delayChildren?: number };
 
-// Each element drives its own timing via the `custom` prop
 const itemVariants: Variants = {
   hidden: (c: ItemCustom = {}) => ({ opacity: 0, y: c.y ?? 50 }),
   visible: (c: ItemCustom = {}) => ({
@@ -34,7 +33,6 @@ const itemVariants: Variants = {
   }),
 };
 
-// Tags container sets the base delay; individual pills handle their own offsets
 const tagsContainerVariants: Variants = {
   hidden: {},
   visible: (c: TagsCustom = {}) => ({
@@ -42,7 +40,6 @@ const tagsContainerVariants: Variants = {
   }),
 };
 
-// Containers just propagate the animate state — no shared stagger
 const colVariants: Variants = {
   hidden: {},
   visible: {},
@@ -54,15 +51,21 @@ interface AboutSectionProps {
   isActive: boolean;
 }
 
-const AboutSection = ({ index, globalProgress }: AboutSectionProps) => {
+const AboutSection = ({ index, globalProgress, isActive }: AboutSectionProps) => {
   const sectionCenter = index / (PANEL_COUNT - 1);
+  const isMobile = useIsMobile();
+  const isMobileRef = useRef(isMobile);
+  useEffect(() => { isMobileRef.current = isMobile; }, [isMobile]);
+
   const [activeModel, setActiveModel] = useState("react");
   const [isHere, setIsHere] = useState(false);
 
   useMotionValueEvent(globalProgress, "change", (latest) => {
+    if (isMobileRef.current) return;
     setIsHere(Math.abs(latest - sectionCenter) < 0.2);
   });
 
+  // Always call — rules of hooks
   const leftX = useTransform(
     globalProgress,
     [sectionCenter - 0.3, sectionCenter, sectionCenter + 0.3],
@@ -79,11 +82,72 @@ const AboutSection = ({ index, globalProgress }: AboutSectionProps) => {
     [0, 1, 0.6],
   );
 
+  const bioLines = [
+    "A frontend developer from the UK.",
+    "My mission is to create practical and aesthetic",
+    "projects that help users achieve their goals",
+    "and push beyond them.",
+    "Nothing is too far fetched to achieve.",
+    "If you have a project in mind, or a killer idea,",
+    "send me a message.",
+  ];
+
+  if (isMobile) {
+    const vis = isActive ? "mob-visible" : "";
+    return (
+      <section className="panel about-panel" aria-label="About">
+        <div className="about-inner">
+          <div className={`about-left mob-animate ${vis}`}>
+            <p className="section-eyebrow">About Me</p>
+            <h2 className="section-title">
+              Built for the<br />details.
+            </h2>
+            <div className="about-bio">
+              <p className="about-bio-start">Hi, I'm Morad</p>
+              <p className="about-bio-text">
+                {bioLines.map((line, i) => (
+                  <span key={i} style={{ display: "block" }}>{line}</span>
+                ))}
+              </p>
+            </div>
+          </div>
+
+          <div className={`about-right mob-animate ${vis}`} style={{ transitionDelay: "0.1s" }}>
+            <p className="about-skills-label">Tech &amp; Tools</p>
+
+            <div className="skill-model-viewer">
+              <SkillModel url={MODEL_MAP[activeModel]} />
+            </div>
+
+            <div className="about-tags">
+              {modelSkills.map((skill) => (
+                <span
+                  key={skill.model}
+                  className={`tag tag--model${activeModel === skill.model ? " tag--active" : ""}`}
+                  onTouchStart={() => setActiveModel(skill.model)}
+                >
+                  {skill.label}
+                </span>
+              ))}
+            </div>
+
+            <p className="about-skills-label about-skills-label--sub">Other</p>
+
+            <div className="about-tags">
+              {otherSkills.map((skill) => (
+                <span key={skill} className="tag">{skill}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="panel about-panel" aria-label="About">
       <motion.div className="about-inner" style={{ opacity }}>
 
-        {/* Left column — each element has its own delay + travel */}
         <motion.div
           className="about-left"
           style={{ x: leftX }}
@@ -116,15 +180,7 @@ const AboutSection = ({ index, globalProgress }: AboutSectionProps) => {
               Hi, I'm Morad
             </motion.p>
             <p className="about-bio-text">
-              {[
-                "A frontend developer from the UK.",
-                "My mission is to create practical and aesthetic",
-                "projects that help users achieve their goals",
-                "and push beyond them.",
-                "Nothing is too far fetched to achieve.",
-                "If you have a project in mind, or a killer idea,",
-                "send me a message.",
-              ].map((line, i) => (
+              {bioLines.map((line, i) => (
                 <motion.span
                   key={i}
                   variants={itemVariants}
@@ -138,7 +194,6 @@ const AboutSection = ({ index, globalProgress }: AboutSectionProps) => {
           </div>
         </motion.div>
 
-        {/* Right column — offset start, heavier elements travel further */}
         <motion.div
           className="about-right"
           style={{ x: rightX }}

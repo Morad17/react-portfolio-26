@@ -223,6 +223,18 @@ body.cursor--on-portrait .custom-cursor {
   border-radius: 10px;
 }
 
+// ── Mobile section entry animations ──────────────────────────────────────────
+.mob-animate {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+
+  &.mob-visible {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 // ── Tablet + Mobile — vertical stack ─────────────────────────────────────────
 @media (max-width: $bp-tablet) {
   .scroll-wrapper {

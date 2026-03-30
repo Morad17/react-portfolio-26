@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   motion,
   useTransform,
@@ -8,6 +8,7 @@ import {
 } from "framer-motion";
 import { projects } from "../data/portfolio";
 import { PANEL_COUNT } from "../App";
+import { useIsMobile } from "../hooks/useIsMobile";
 
 import salesGif from "../assets/gif/horizon-sales.gif";
 import appGif from "../assets/gif/horizon-app.gif";
@@ -53,27 +54,31 @@ interface ProjectsSectionProps {
   isActive: boolean;
 }
 
-const ProjectsSection = ({ index, globalProgress }: ProjectsSectionProps) => {
+const ProjectsSection = ({ index, globalProgress, isActive }: ProjectsSectionProps) => {
   const sectionCenter = index / (PANEL_COUNT - 1);
+  const isMobile = useIsMobile();
+  const isMobileRef = useRef(isMobile);
+  useEffect(() => { isMobileRef.current = isMobile; }, [isMobile]);
+
   const [activeTab, setActiveTab] = useState<Tab>("website");
-  const [tileAnimate, setTileAnimate] = useState<
-    "hidden" | "visible" | "instant"
-  >("hidden");
+  const [tileAnimate, setTileAnimate] = useState<"hidden" | "visible" | "instant">("hidden");
 
   useMotionValueEvent(globalProgress, "change", (latest) => {
+    if (isMobileRef.current) return;
     const nowHere = Math.abs(latest - sectionCenter) < 0.2;
     setTileAnimate((prev) => {
       if (!nowHere) return "hidden";
-      if (prev === "hidden") return "visible"; // scroll entry — animate in
-      return prev; // already visible/instant — don't interrupt
+      if (prev === "hidden") return "visible";
+      return prev;
     });
   });
 
   const handleTabChange = (tab: Tab) => {
     setActiveTab(tab);
-    setTileAnimate("instant"); // tab switch — snap tiles in with no delay
+    if (!isMobile) setTileAnimate("instant");
   };
 
+  // Always call — rules of hooks
   const headerY = useTransform(
     globalProgress,
     [sectionCenter - 0.3, sectionCenter, sectionCenter + 0.3],
@@ -92,6 +97,79 @@ const ProjectsSection = ({ index, globalProgress }: ProjectsSectionProps) => {
 
   const [sales, app] = projects;
   const active = activeTab === "website" ? sales : app;
+
+  if (isMobile) {
+    const vis = isActive ? "mob-visible" : "";
+    return (
+      <section className="panel projects-panel" aria-label="Projects">
+        <div className="projects-inner">
+          <div className={`projects-header mob-animate ${vis}`}>
+            <p className="section-eyebrow">Previous Work</p>
+            <h2 className="projects-company">Horizon Sales</h2>
+            <p className="projects-desc">
+              Latest projects include working with Horizon to develop their
+              software needs — from building a website to an app and backend,
+              incorporating their data collection, analysis and goal
+              implementation needs.
+            </p>
+          </div>
+
+          <div className={`project-tabs mob-animate ${vis}`} style={{ transitionDelay: "0.1s" }}>
+            <button
+              className={`tab-btn${activeTab === "website" ? " tab-btn--active" : ""}`}
+              onClick={() => handleTabChange("website")}
+            >
+              Website
+            </button>
+            <button
+              className={`tab-btn${activeTab === "app" ? " tab-btn--active" : ""}`}
+              onClick={() => handleTabChange("app")}
+            >
+              App
+            </button>
+          </div>
+
+          <div key={activeTab} className={`project-bento project-bento--${activeTab}`}>
+            <div className={`bt bt--gif mob-animate ${vis}`} style={{ transitionDelay: "0.15s" }}>
+              <img src={GIF_MAP[active.id]} alt={`${active.title} preview`} />
+            </div>
+
+            <div className={`bt bt--feat mob-animate ${vis}`} style={{ transitionDelay: "0.2s" }}>
+              <ul className="project-features">
+                {active.features.map((f) => (
+                  <li key={f.label}>{f.label}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div className={`bt bt--desc mob-animate ${vis}`} style={{ transitionDelay: "0.25s" }}>
+              <p>{active.description}</p>
+            </div>
+
+            <div className={`bt bt--skills mob-animate ${vis}`} style={{ transitionDelay: "0.3s" }}>
+              {active.skills.map((s) => (
+                <span key={s} className="skill-tag">{s}</span>
+              ))}
+            </div>
+
+            {activeTab === "website" && (
+              <div className={`bt bt--live mob-animate ${vis}`} style={{ transitionDelay: "0.35s" }}>
+                <a href={sales.url} target="_blank" rel="noopener noreferrer">
+                  Live Page ↗
+                </a>
+              </div>
+            )}
+
+            <div className={`bt bt--code mob-animate ${vis}`} style={{ transitionDelay: "0.35s" }}>
+              <a href={active.codeUrl ?? "#"} target="_blank" rel="noopener noreferrer">
+                Code ↗
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="panel projects-panel" aria-label="Projects">
@@ -129,7 +207,6 @@ const ProjectsSection = ({ index, globalProgress }: ProjectsSectionProps) => {
           key={activeTab}
           className={`project-bento project-bento--${activeTab}`}
         >
-          {/* Gif tile — from left, starts first */}
           <motion.div
             className="bt bt--gif"
             variants={tileVariants}
@@ -140,7 +217,6 @@ const ProjectsSection = ({ index, globalProgress }: ProjectsSectionProps) => {
             <img src={GIF_MAP[active.id]} alt={`${active.title} preview`} />
           </motion.div>
 
-          {/* Features tile */}
           <motion.div
             className="bt bt--feat"
             variants={tileVariants}
@@ -155,7 +231,6 @@ const ProjectsSection = ({ index, globalProgress }: ProjectsSectionProps) => {
             </ul>
           </motion.div>
 
-          {/* Description tile */}
           <motion.div
             className="bt bt--desc"
             variants={tileVariants}
@@ -166,7 +241,6 @@ const ProjectsSection = ({ index, globalProgress }: ProjectsSectionProps) => {
             <p>{active.description}</p>
           </motion.div>
 
-          {/* Skills tile */}
           <motion.div
             className="bt bt--skills"
             variants={tileVariants}
@@ -181,7 +255,6 @@ const ProjectsSection = ({ index, globalProgress }: ProjectsSectionProps) => {
             ))}
           </motion.div>
 
-          {/* Live Button*/}
           {activeTab === "website" && (
             <motion.div
               className="bt bt--live"
@@ -196,7 +269,6 @@ const ProjectsSection = ({ index, globalProgress }: ProjectsSectionProps) => {
             </motion.div>
           )}
 
-          {/* Code Button */}
           <motion.div
             className="bt bt--code"
             variants={tileVariants}
