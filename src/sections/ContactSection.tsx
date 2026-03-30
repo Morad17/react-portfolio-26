@@ -23,7 +23,11 @@ interface ContactSectionProps {
   isActive: boolean;
 }
 
-const ContactSection = ({ index, globalProgress, isActive }: ContactSectionProps) => {
+const ContactSection = ({
+  index,
+  globalProgress,
+  isActive,
+}: ContactSectionProps) => {
   const sectionCenter = index / (PANEL_COUNT - 1);
   const isMobile = useIsMobile();
 
@@ -81,7 +85,9 @@ const ContactSection = ({ index, globalProgress, isActive }: ContactSectionProps
   const formContent = (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
       <div className="form-group">
-        <label className="form-label" htmlFor="name">Name</label>
+        <label className="form-label" htmlFor="name">
+          Name
+        </label>
         <input
           id="name"
           className="form-input"
@@ -90,12 +96,16 @@ const ContactSection = ({ index, globalProgress, isActive }: ContactSectionProps
           {...register("name", { required: "Name is required" })}
         />
         {errors.name && (
-          <span className="form-status form-status--error">{errors.name.message}</span>
+          <span className="form-status form-status--error">
+            {errors.name.message}
+          </span>
         )}
       </div>
 
       <div className="form-group">
-        <label className="form-label" htmlFor="email">Email</label>
+        <label className="form-label" htmlFor="email">
+          Email
+        </label>
         <input
           id="email"
           className="form-input"
@@ -107,12 +117,16 @@ const ContactSection = ({ index, globalProgress, isActive }: ContactSectionProps
           })}
         />
         {errors.email && (
-          <span className="form-status form-status--error">{errors.email.message}</span>
+          <span className="form-status form-status--error">
+            {errors.email.message}
+          </span>
         )}
       </div>
 
       <div className="form-group">
-        <label className="form-label" htmlFor="message">Message</label>
+        <label className="form-label" htmlFor="message">
+          Message
+        </label>
         <textarea
           id="message"
           className="form-textarea"
@@ -120,7 +134,9 @@ const ContactSection = ({ index, globalProgress, isActive }: ContactSectionProps
           {...register("message", { required: "Message is required" })}
         />
         {errors.message && (
-          <span className="form-status form-status--error">{errors.message.message}</span>
+          <span className="form-status form-status--error">
+            {errors.message.message}
+          </span>
         )}
       </div>
 
@@ -159,12 +175,15 @@ const ContactSection = ({ index, globalProgress, isActive }: ContactSectionProps
             <p className="section-eyebrow">Get in Touch</p>
             <h2 className="section-title">Contact Me.</h2>
             <a href="mailto:contact@morad.ink" className="contact-email">
-              contact@morad.ink
+              contact@itsmorad.com
             </a>
             <p className="contact-tagline">Drop me a message.</p>
           </div>
 
-          <div className={`contact-right mob-animate ${vis}`} style={{ transitionDelay: "0.1s" }}>
+          <div
+            className={`contact-right mob-animate ${vis}`}
+            style={{ transitionDelay: "0.1s" }}
+          >
             {formContent}
           </div>
         </div>
