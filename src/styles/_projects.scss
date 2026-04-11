@@ -79,6 +79,14 @@
       "gif  gif   desc "
       "gif  gif   feat "
       "live code  skill";
+
+    .bt--gif {
+      height: 400px;
+
+      img {
+        object-fit: cover;
+      }
+    }
   }
 
   // App tab: 2-col — gif+skills left, desc+feat+code right
@@ -248,5 +256,7 @@
       "code";
   }
 
-  .projects-panel .bt--gif img { object-fit: contain; }
+  .projects-panel .bt--gif img {
+    object-fit: contain;
+  }
 }

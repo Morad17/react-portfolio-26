@@ -66,6 +66,24 @@ export const projects: Project[] = [
     url: "https://github.com/Morad17/horizon-app-frontend/",
     color: "rgba(0,0,0,0.8)",
   },
+  {
+    id: "morads-journal",
+    title: "Morads Journal",
+    type: "Website",
+    codeUrl: "https://github.com/Morad17/personal-travel-blog-react",
+    description:
+      "Creating a personal Travel/Blog/Companion website, which give inspiration for new journeys. Featuring an interactive and 3d globe map of places travelled to and timeline of places, and gallery of travel photos. Admin panel allows for seamless crud funtions, and article creators.",
+    features: [
+      { label: "Admin article creator" },
+      { label: "Interactive 3d Map" },
+      { label: "Masonry Gallery" },
+      { label: "CRUD functions" },
+      { label: "Photo uploader, with metadata" },
+    ],
+    skills: ["Typescript", "Postgress", "Node.js", "Prisma"],
+    url: "https://morads-journal.netlify.app",
+    color: "rgba(0,0,0,0.8)",
+  },
 ];
 
 // ── Experience ────────────────────────────────────────────────────────────────
